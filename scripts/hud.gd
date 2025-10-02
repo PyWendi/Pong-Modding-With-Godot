@@ -19,6 +19,7 @@ extends CanvasLayer
 	Global.Player.RIGHT: %PlayerRightScore,
 }
 
+@onready var game_over_label = $%GameOverTexte
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

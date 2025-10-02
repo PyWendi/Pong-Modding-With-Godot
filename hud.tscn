@@ -32,7 +32,7 @@ region_rect = Rect2(0, 0, 20, 1100)
 
 [node name="PlayerLeftScore" type="Label" parent="Control"]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = 240.0
 offset_right = 717.0
 offset_bottom = 1080.0
@@ -45,7 +45,7 @@ horizontal_alignment = 1
 
 [node name="PlayerRightScore" type="Label" parent="Control"]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
 offset_left = 1200.0
 offset_right = 1677.0
 offset_bottom = 1080.0
@@ -55,3 +55,21 @@ size_flags_vertical = 1
 theme_override_font_sizes/font_size = 200
 text = "0"
 horizontal_alignment = 1
+
+[node name="GameOverTexte" type="Label" parent="Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -431.0
+offset_top = -136.5
+offset_right = 431.0
+offset_bottom = 136.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 250
+text = "You Lose"

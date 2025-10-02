@@ -75,6 +75,8 @@ var _last_player_scored: Global.Player = Global.Player.LEFT
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.goal_scored.connect(_on_goal_scored)
+	# Game Over signal connection
+	#Global.game_over.connect()
 	await Global.hud_added
 	Global.add_score(Global.Player.LEFT, left_initial_score)
 	Global.add_score(Global.Player.RIGHT, right_initial_score)
@@ -82,6 +84,9 @@ func _ready():
 
 
 func _spawn_balls(player: Global.Player = Global.Player.LEFT):
+	"""
+	Spawn the balls inside the BallSpawner node
+	"""
 	for spawner in get_tree().get_nodes_in_group("ball spawners"):
 		_spawn_ball(spawner, player)
 
@@ -138,17 +143,23 @@ func _on_ball_hang(ball):
 	if spawner != null:
 		_spawn_ball(spawner, _last_player_scored)
 
+# Call the game over system from the UI 
+# by the emit from global
+func _show_game_over(winner : Global.Player):
+	pass
 
 func _on_goal_scored(ball: Node2D, player: Global.Player):
 	if end_on_first_goal_reached:
 		# TODO: Show "you lose" message instead.
-		get_tree().quit()
-
-	if score_on_left_goal_reached and player == Global.Player.LEFT:
-		Global.add_score(left_goal_scoring_player, left_goal_points)
-	elif score_on_right_goal_reached and player == Global.Player.RIGHT:
-		Global.add_score(right_goal_scoring_player, right_goal_points)
-	var spawner = ball.get_meta("spawner")
-	ball.queue_free()
-	if spawner != null:
-		_spawn_ball(spawner, player)
+		Global._initialise_score()
+		#get_tree().quit()
+		
+	else :
+		if score_on_left_goal_reached and player == Global.Player.LEFT:
+			Global.add_score(left_goal_scoring_player, left_goal_points)
+		elif score_on_right_goal_reached and player == Global.Player.RIGHT:
+			Global.add_score(right_goal_scoring_player, right_goal_points)
+		var spawner = ball.get_meta("spawner")
+		ball.queue_free()
+		if spawner != null:
+			_spawn_ball(spawner, player)

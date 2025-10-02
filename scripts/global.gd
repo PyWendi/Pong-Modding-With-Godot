@@ -6,6 +6,7 @@ signal hud_added
 
 signal score_changed
 signal goal_scored(ball: Node2D, player: Player)
+signal game_over(winner: Global.Player)
 
 enum Player { LEFT, RIGHT, BOTH }
 
@@ -15,14 +16,16 @@ var score = {
 	Player.RIGHT: 0,
 }
 
-
-# Initialize the score to 0
+# Initialize the score to 0 to set it back from the previous mode
 func _initialise_score():
 	score[Player.RIGHT] = 0
 	score[Player.LEFT] = 0
+	# Emit the UI to update the score 
+	# according to the score.Player.LEFT/RIGHT
+	score_changed.emit()
+
 func score_goal(ball: Node2D, player: Player):
 	goal_scored.emit(ball, player)
-
 
 func add_score(player: Player, value: int):
 	if player == Player.BOTH:
