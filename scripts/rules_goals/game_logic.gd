@@ -71,12 +71,15 @@ extends Node
 
 var _last_player_scored: Global.Player = Global.Player.LEFT
 
+# Checked by the global script to recieve game over signal from the game logic
+#signal game_over(winner: Global.Player)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.goal_scored.connect(_on_goal_scored)
 	# Game Over signal connection
-	#Global.game_over.connect()
+	Global.respawn_ball.connect(_call_ball_spawner)
+	
 	await Global.hud_added
 	Global.add_score(Global.Player.LEFT, left_initial_score)
 	Global.add_score(Global.Player.RIGHT, right_initial_score)
@@ -132,7 +135,14 @@ func _on_ball_touched_paddle():
 func _on_ball_touched_obstacle():
 	if end_on_first_obstacle_reached:
 		# TODO: Show "you lose" message instead.
-		get_tree().quit()
+		var ball = get_tree().get_first_node_in_group("balls")
+		#print(ball)  # instance du BasicBall
+		ball.hide()
+		ball.linear_velocity = Vector2.ZERO
+		ball.get_node("CollisionShape2D").set_deferred("disabled", true)
+		_show_game_over(ball, Global.Player.BOTH)
+		#get_tree().quit()
+		
 	if score_on_obstacle_touched:
 		Global.add_score(obstacle_touched_scoring_player, obstacle_touched_points)
 
@@ -143,23 +153,44 @@ func _on_ball_hang(ball):
 	if spawner != null:
 		_spawn_ball(spawner, _last_player_scored)
 
-# Call the game over system from the UI 
+# Call the game over system from for the UI
 # by the emit from global
-func _show_game_over(winner : Global.Player):
-	pass
+func _show_game_over(ball: Node2D, loser : Global.Player, both:bool = false) -> void:
+	#Initialise score to 0
+	Global.initialise_score()
+	Global.initialize_game_over(ball, loser)
+	# Respawn the ball again 
+
+func _call_ball_spawner(ball: Node2D, player: Global.Player):
+	ball.queue_free()
+	var spawner = ball.get_meta("spawner")
+	if spawner != null:
+		_spawn_ball(spawner, player)
+
+#Check left winer
+func _check_left_winner(player: Global.Player):
+	return score_on_left_goal_reached and player == Global.Player.LEFT
+#Check right winer
+func _check_right_winner(player: Global.Player):
+	return score_on_right_goal_reached and player == Global.Player.RIGHT
+
+
 
 func _on_goal_scored(ball: Node2D, player: Global.Player):
 	if end_on_first_goal_reached:
-		# TODO: Show "you lose" message instead.
-		Global._initialise_score()
+		# TODO: Show "you lose" message instead
+		ball.hide()
+		ball.linear_velocity = Vector2.ZERO
+		ball.get_node("CollisionShape2D").set_deferred("disabled", true)
+		_show_game_over(ball, player)
+		
 		#get_tree().quit()
 		
 	else :
-		if score_on_left_goal_reached and player == Global.Player.LEFT:
+		if _check_left_winner(player):
 			Global.add_score(left_goal_scoring_player, left_goal_points)
-		elif score_on_right_goal_reached and player == Global.Player.RIGHT:
+		elif _check_right_winner(player):
 			Global.add_score(right_goal_scoring_player, right_goal_points)
-		var spawner = ball.get_meta("spawner")
 		ball.queue_free()
-		if spawner != null:
-			_spawn_ball(spawner, player)
+		_call_ball_spawner(ball, player)
+		

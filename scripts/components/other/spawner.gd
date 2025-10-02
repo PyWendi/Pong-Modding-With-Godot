@@ -20,7 +20,6 @@ const _DEFAULT_SHAPE_SIZE = Vector2(200, 200)
 var _default_shape: RectangleShape2D = RectangleShape2D.new()
 var _nodes: Array[Node2D] = []
 
-
 func _set_spawn_area(new_area):
 	spawn_area = new_area
 	spawn_area.changed.connect(func(): queue_redraw())

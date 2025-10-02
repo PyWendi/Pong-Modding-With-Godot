@@ -5,6 +5,7 @@
 
 [node name="HUD" type="CanvasLayer" groups=["hud"]]
 script = ExtResource("1_yyb01")
+seconds_before_restart = null
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -56,20 +57,29 @@ theme_override_font_sizes/font_size = 200
 text = "0"
 horizontal_alignment = 1
 
-[node name="GameOverTexte" type="Label" parent="Control"]
-unique_name_in_owner = true
-visible = false
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -431.0
-offset_top = -136.5
-offset_right = 431.0
-offset_bottom = 136.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="GameOverTexte" type="Label" parent="Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_font_sizes/font_size = 250
-text = "You Lose"
+
+[node name="SecondBeforeRestart" type="Label" parent="Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Restart after 3s"
+horizontal_alignment = 1
+vertical_alignment = 1

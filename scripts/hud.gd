@@ -20,19 +20,46 @@ extends CanvasLayer
 }
 
 @onready var game_over_label = $%GameOverTexte
+@onready var game_over_timer_label = %SecondBeforeRestart
+@export var seconds_before_restart:int = 5
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if Engine.is_editor_hint():
 		return
-
+	game_over_label.hide()
+	game_over_timer_label.hide()
+	
 	Global.hud_added.emit()
 	Global.score_changed.connect(_on_score_changed)
+	Global.game_over.connect(_show_game_over_text)
 
 
 func _on_score_changed():
 	set_players_scores(Global.score[Global.Player.LEFT], Global.score[Global.Player.RIGHT])
 
+# Show the game over texte
+func _show_game_over_text(ball: Node2D, player : Global.Player):
+	# Show then hide the text, and call for ball respawn after  few seconds
+	var game_over_text = "Right Player Lose !"
+	if player == Global.Player.LEFT:
+		game_over_text = "Left Player Lose !"
+	if player == Global.Player.BOTH:
+		game_over_text = "Both Player Lose !"
+	game_over_label.text = game_over_text
+	game_over_label.show()
+	game_over_timer_label.show()
+	
+	#Show second cooldown
+	for i in range(seconds_before_restart, 0, -1):
+		game_over_timer_label.text = "The game restarts after " + str(i) + "s."
+		await get_tree().create_timer(1).timeout
+
+	game_over_label.text = ""
+	game_over_timer_label.text = ""
+	game_over_label.hide()
+	game_over_timer_label.hide()
+	Global.respawn_ball_from_game_over(ball, player)
 
 func _set_font_size(new_font_size: float):
 	font_size = new_font_size

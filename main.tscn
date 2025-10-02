@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bel3lwsvc2uc3"]
+[gd_scene load_steps=10 format=3 uid="uid://bel3lwsvc2uc3"]
 
 [ext_resource type="PackedScene" uid="uid://s7enbp56f256" path="res://components/paddles/basic_paddle.tscn" id="1_xxpg5"]
 [ext_resource type="PackedScene" uid="uid://cg1m4evi8c35o" path="res://components/other/spawner.tscn" id="3_spct4"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://bis7afjjuwypq" path="res://hud.tscn" id="4_4868o"]
 [ext_resource type="PackedScene" uid="uid://cg8ibi18um3vg" path="res://spaces/basic_space.tscn" id="4_nvjpm"]
 [ext_resource type="PackedScene" uid="uid://c7l70grmkauij" path="res://components/balls/basic_ball.tscn" id="4_rffv2"]
+[ext_resource type="PackedScene" uid="uid://bg8qfa6xrifm1" path="res://components/other/asteroid.tscn" id="7_272bh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_guyqd"]
 size = Vector2(10, 1080)
@@ -33,11 +34,15 @@ life_time = 0.0
 
 [node name="BasicBall" parent="BallSpawner" instance=ExtResource("4_rffv2")]
 position = Vector2(109, 0)
-linear_velocity = Vector2(353.55338, 353.55338)
 tint = Color(0.50980395, 0.36078432, 0.972549, 1)
 
 [node name="GameLogic" parent="." instance=ExtResource("3_umelw")]
 end_on_first_goal_reached = true
+end_on_first_obstacle_reached = true
 
 [node name="HUD" parent="." instance=ExtResource("4_4868o")]
 font = SubResource("SystemFont_24cl0")
+seconds_before_restart = 5
+
+[node name="Asteroid" parent="." instance=ExtResource("7_272bh")]
+position = Vector2(710, 606)

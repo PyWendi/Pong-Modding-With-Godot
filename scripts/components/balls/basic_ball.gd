@@ -3,7 +3,7 @@ class_name BasicBall
 extends RigidBody2D
 
 signal touched_paddle
-signal touched_obstacle
+signal touched_obstacle()
 signal hang
 
 const _INITIAL_RADIUS: int = 64
