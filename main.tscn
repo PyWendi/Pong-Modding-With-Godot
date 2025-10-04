@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bel3lwsvc2uc3"]
+[gd_scene load_steps=11 format=3 uid="uid://bel3lwsvc2uc3"]
 
 [ext_resource type="PackedScene" uid="uid://s7enbp56f256" path="res://components/paddles/basic_paddle.tscn" id="1_xxpg5"]
 [ext_resource type="PackedScene" uid="uid://cg1m4evi8c35o" path="res://components/other/spawner.tscn" id="3_spct4"]
@@ -6,7 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://bis7afjjuwypq" path="res://hud.tscn" id="4_4868o"]
 [ext_resource type="PackedScene" uid="uid://cg8ibi18um3vg" path="res://spaces/basic_space.tscn" id="4_nvjpm"]
 [ext_resource type="PackedScene" uid="uid://c7l70grmkauij" path="res://components/balls/basic_ball.tscn" id="4_rffv2"]
-[ext_resource type="PackedScene" uid="uid://bg8qfa6xrifm1" path="res://components/other/asteroid.tscn" id="7_272bh"]
+[ext_resource type="PackedScene" uid="uid://by7bpdpur84xu" path="res://components/other/vortex.tscn" id="6_272bh"]
+[ext_resource type="AudioStream" uid="uid://dcxf3o02wagfq" path="res://assets/audio/Bleeping Demo.mp3" id="8_5vw27"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_guyqd"]
 size = Vector2(10, 1080)
@@ -20,12 +21,14 @@ metadata/_edit_vertical_guides_ = [-933.0]
 
 [node name="BasicPaddleLeft" parent="." instance=ExtResource("1_xxpg5")]
 position = Vector2(64, 512)
-tint = Color(0.511023, 0.361749, 0.971889, 1)
+speed = 1400.0
+tint = Color(0.9019608, 0.6431373, 0.33333334, 1)
 
 [node name="BasicPaddleRight" parent="." instance=ExtResource("1_xxpg5")]
 position = Vector2(1856, 512)
 player = 1
-tint = Color(0.511023, 0.361749, 0.971889, 1)
+speed = 1400.0
+tint = Color(0.9034188, 0.64504284, 0.33505803, 1)
 
 [node name="BallSpawner" parent="." groups=["ball spawners"] instance=ExtResource("3_spct4")]
 position = Vector2(967, 531)
@@ -34,15 +37,26 @@ life_time = 0.0
 
 [node name="BasicBall" parent="BallSpawner" instance=ExtResource("4_rffv2")]
 position = Vector2(109, 0)
-tint = Color(0.50980395, 0.36078432, 0.972549, 1)
+tint = Color(0.29790735, 0.4665879, 0.9193376, 1)
+
+[node name="Vortex" parent="." instance=ExtResource("6_272bh")]
+position = Vector2(1480, 536)
+scale = Vector2(0.75, 0.75)
+
+[node name="Vortex2" parent="." instance=ExtResource("6_272bh")]
+position = Vector2(496, 512)
+scale = Vector2(0.75, 0.75)
 
 [node name="GameLogic" parent="." instance=ExtResource("3_umelw")]
+paddle_touched_scoring_player = 2
 end_on_first_goal_reached = true
-end_on_first_obstacle_reached = true
+ball_velocity_multiplier = 1.3
+ball_size_multiplier = 1.1
 
 [node name="HUD" parent="." instance=ExtResource("4_4868o")]
 font = SubResource("SystemFont_24cl0")
-seconds_before_restart = 5
 
-[node name="Asteroid" parent="." instance=ExtResource("7_272bh")]
-position = Vector2(710, 606)
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_5vw27")
+volume_db = -0.143
+autoplay = true

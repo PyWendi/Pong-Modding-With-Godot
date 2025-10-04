@@ -153,9 +153,9 @@ func _on_ball_hang(ball):
 	if spawner != null:
 		_spawn_ball(spawner, _last_player_scored)
 
-# Call the game over system from for the UI
+# Call the game over system for the UI
 # by the emit from global
-func _show_game_over(ball: Node2D, loser : Global.Player, both:bool = false) -> void:
+func _show_game_over(ball: Node2D, loser : Global.Player) -> void:
 	#Initialise score to 0
 	Global.initialise_score()
 	Global.initialize_game_over(ball, loser)

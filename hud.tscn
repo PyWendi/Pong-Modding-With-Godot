@@ -5,7 +5,12 @@
 
 [node name="HUD" type="CanvasLayer" groups=["hud"]]
 script = ExtResource("1_yyb01")
-seconds_before_restart = null
+
+[node name="BackgroundFade" type="ColorRect" parent="."]
+unique_name_in_owner = true
+offset_right = 1920.0
+offset_bottom = 1096.0
+color = Color(0.3137255, 0.039215688, 0.4117647, 0.5137255)
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -74,7 +79,8 @@ grow_vertical = 2
 [node name="GameOverTexte" type="Label" parent="Control/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 250
+theme_override_font_sizes/font_size = 200
+text = "winner"
 
 [node name="SecondBeforeRestart" type="Label" parent="Control/VBoxContainer"]
 unique_name_in_owner = true
@@ -83,3 +89,20 @@ theme_override_font_sizes/font_size = 50
 text = "Restart after 3s"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 685.0
+offset_top = 808.0
+offset_right = 1235.0
+offset_bottom = 919.0
+tooltip_text = "Leave the game
+"
+
+[node name="QuitButton" type="Button" parent="Control/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 75
+text = "Quit The Game"
+
+[connection signal="pressed" from="Control/VBoxContainer2/QuitButton" to="." method="_on_quit_button_pressed"]

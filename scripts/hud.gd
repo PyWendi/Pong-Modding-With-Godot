@@ -21,6 +21,8 @@ extends CanvasLayer
 
 @onready var game_over_label = $%GameOverTexte
 @onready var game_over_timer_label = %SecondBeforeRestart
+@onready var quit_button = %QuitButton
+@onready var background_fade = %BackgroundFade
 @export var seconds_before_restart:int = 5
 
 # Called when the node enters the scene tree for the first time.
@@ -29,6 +31,9 @@ func _ready():
 		return
 	game_over_label.hide()
 	game_over_timer_label.hide()
+	quit_button.hide()
+	background_fade.hide()
+	
 	
 	Global.hud_added.emit()
 	Global.score_changed.connect(_on_score_changed)
@@ -47,8 +52,10 @@ func _show_game_over_text(ball: Node2D, player : Global.Player):
 	if player == Global.Player.BOTH:
 		game_over_text = "Both Player Lose !"
 	game_over_label.text = game_over_text
+	background_fade.show()
 	game_over_label.show()
 	game_over_timer_label.show()
+	quit_button.show()
 	
 	#Show second cooldown
 	for i in range(seconds_before_restart, 0, -1):
@@ -59,6 +66,8 @@ func _show_game_over_text(ball: Node2D, player : Global.Player):
 	game_over_timer_label.text = ""
 	game_over_label.hide()
 	game_over_timer_label.hide()
+	quit_button.hide()
+	background_fade.hide()
 	Global.respawn_ball_from_game_over(ball, player)
 
 func _set_font_size(new_font_size: float):
@@ -102,3 +111,7 @@ func set_players_scores(left_score: int, right_score: int):
 		DampedOscillator.animate(
 			_score_labels[Global.Player.RIGHT], "rotation", 300.0, 7.0, 95.0, 0.5
 		)
+
+# When the button is pressed, the game quit
+func _on_quit_button_pressed() -> void:
+	get_tree().quit()
